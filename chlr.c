@@ -13,8 +13,12 @@ static inline size_t round_up(size_t n, size_t m) {
     return n - 1 - (n - 1) % m + m;
 }
 
+static inline void print_usage(const char* name) {
+    fprintf(stderr, "usage: %s [mode=e/enc/encode/d/dec/decode] [infile] [ofile]\n", name), exit(0);
+}
+
 int main(int argc, char** argv) {
-    if(argc < 4) fprintf(stderr, "usage: %s [mode=e/enc/encode/d/dec/decode] [infile] [ofile]\n", argv[0]), exit(0);
+    if(argc < 4) print_usage(argv[0]);
 
     struct {
         cl_int err;
@@ -28,6 +32,11 @@ int main(int argc, char** argv) {
         size_t lwg_size;
     } cl;
     
+    enum { op_encode, op_decode } op_mode;
+         if(*argv[1] == 'e' || strcmp(argv[1], "enc") == 0 || strcmp(argv[1], "encode") == 0) op_mode = op_encode;
+    else if(*argv[1] == 'd' || strcmp(argv[1], "dec") == 0 || strcmp(argv[1], "decode") == 0) op_mode = op_decode;
+    else print_usage();
+    
     {   // initialisation work, to get OpenCL up and running.
         assert(clGetPlatformIDs(1, &cl.pf, NULL) == CL_SUCCESS);
         assert(clGetDeviceIDs(cl.pf, CL_DEVICE_TYPE_DEFAULT, 1, &cl.dev, NULL) == CL_SUCCESS);
@@ -39,11 +48,6 @@ int main(int argc, char** argv) {
         // retrieve the max work group size.
         clGetDeviceInfo(cl.dev, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &cl.lwg_size, NULL);
     }
-
-    enum { op_encode, op_decode } op_mode;
-         if(*argv[1] == 'e' || strcmp(argv[1], "enc") == 0 || strcmp(argv[1], "encode") == 0) op_mode = op_encode;
-    else if(*argv[1] == 'd' || strcmp(argv[1], "dec") == 0 || strcmp(argv[1], "decode") == 0) op_mode = op_decode;
-    else { goto finish; }
 
     FILE *in  = fopen(argv[2], "rb");
     FILE *out = fopen(argv[3], "wb");
@@ -126,8 +130,7 @@ int main(int argc, char** argv) {
 
             fwrite(outbuf, 1, outsize, out);
         }
-
-finish:
+    
     clReleaseKernel(cl.kern);
     clReleaseProgram(cl.prog);
     clReleaseCommandQueue(cl.cmdq);
