@@ -1,10 +1,13 @@
 #define CL_TARGET_OPENCL_VERSION 200
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <CL/cl.h>
 #include <math.h>
 #include <assert.h>
+
+#include <CL/cl.h>
+
 #include "clprog.h"
 
 #define DEFAULT_IO_BUFFER_SIZE (1024 * 64)
@@ -35,7 +38,7 @@ int main(int argc, char** argv) {
     enum { op_encode, op_decode } op_mode;
          if(*argv[1] == 'e' || strcmp(argv[1], "enc") == 0 || strcmp(argv[1], "encode") == 0) op_mode = op_encode;
     else if(*argv[1] == 'd' || strcmp(argv[1], "dec") == 0 || strcmp(argv[1], "decode") == 0) op_mode = op_decode;
-    else print_usage();
+    else print_usage(argv[0]);
     
     {   // initialisation work, to get OpenCL up and running.
         assert(clGetPlatformIDs(1, &cl.pf, NULL) == CL_SUCCESS);
