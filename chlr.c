@@ -1,4 +1,4 @@
-#define CL_TARGET_OPENCL_VERSION 200
+#define CL_TARGET_OPENCL_VERSION 100
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
         assert(clGetPlatformIDs(1, &cl.pf, NULL) == CL_SUCCESS);
         assert(clGetDeviceIDs(cl.pf, CL_DEVICE_TYPE_DEFAULT, 1, &cl.dev, NULL) == CL_SUCCESS);
         assert((cl.ctx = clCreateContext(NULL, 1, &cl.dev, NULL, NULL, &cl.err), cl.err == CL_SUCCESS));
-        assert((cl.cmdq = clCreateCommandQueueWithProperties(cl.ctx, cl.dev, NULL, &cl.err), cl.err == CL_SUCCESS));
+        assert((cl.cmdq = clCreateCommandQueue(cl.ctx, cl.dev, 0, &cl.err), cl.err == CL_SUCCESS));
         assert((cl.prog = clCreateProgramWithSource(cl.ctx, 1, &cl_codus, NULL, &cl.err), cl.err == CL_SUCCESS));
         assert(clBuildProgram(cl.prog, 0, NULL, NULL, NULL, NULL) == CL_SUCCESS);
 
