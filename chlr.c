@@ -1,4 +1,4 @@
-#define CL_TARGET_OPENCL_VERSION 100
+#define CL_TARGET_OPENCL_VERSION 120
 
 #include <stdio.h>
 #include <stdlib.h>
