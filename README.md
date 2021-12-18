@@ -1,4 +1,4 @@
-This is a OpenCL accelarated implementation of the K3C (formely 5CP) specified raw *violeur format* encoder and decoder written in C99, to benifit off any type of OpenCL compatible device not just the CPU, for now it chooses the default.
+This is a OpenCL accelarated implementation of the K3C (formely 5CP) specified raw *vlr format* encoder and decoder written in C99, to benifit off any type of OpenCL compatible device not just the CPU, for now it chooses the default.
 
 ### Building
 
